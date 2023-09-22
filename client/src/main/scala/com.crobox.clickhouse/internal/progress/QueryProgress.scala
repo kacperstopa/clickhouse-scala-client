@@ -1,7 +1,7 @@
 package com.crobox.clickhouse.internal.progress
-import akka.NotUsed
-import akka.stream.scaladsl.{BroadcastHub, Keep, RunnableGraph, Source, SourceQueueWithComplete}
-import akka.stream.{ActorAttributes, OverflowStrategy, Supervision}
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.scaladsl.{BroadcastHub, Keep, RunnableGraph, Source, SourceQueueWithComplete}
+import org.apache.pekko.stream.{ActorAttributes, OverflowStrategy, Supervision}
 import com.typesafe.scalalogging.LazyLogging
 import spray.json._
 import spray.json.DefaultJsonProtocol._
@@ -17,7 +17,8 @@ object QueryProgress extends LazyLogging {
   case class QueryRetry(cause: Throwable, retryNumber: Int) extends QueryProgress
 
   case class ClickhouseQueryProgress(identifier: String, progress: QueryProgress)
-  case class Progress(rowsRead: Long, bytesRead: Long, rowsWritten: Long, bytesWritten: Long, totalRows: Long) extends QueryProgress
+  case class Progress(rowsRead: Long, bytesRead: Long, rowsWritten: Long, bytesWritten: Long, totalRows: Long)
+      extends QueryProgress
 
   def queryProgressStream: RunnableGraph[(SourceQueueWithComplete[String], Source[ClickhouseQueryProgress, NotUsed])] =
     Source
@@ -33,11 +34,11 @@ object QueryProgress extends LazyLogging {
                   ClickhouseQueryProgress(
                     queryId,
                     Progress(
-                        fields("read_rows").convertTo[String].toLong,
-                        fields("read_bytes").convertTo[String].toLong,
-                        0,
-                        0,
-                        fields("total_rows").convertTo[String].toLong
+                      fields("read_rows").convertTo[String].toLong,
+                      fields("read_bytes").convertTo[String].toLong,
+                      0,
+                      0,
+                      fields("total_rows").convertTo[String].toLong
                     )
                   )
                 case JsObject(fields) if fields.size == 5 =>

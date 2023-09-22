@@ -53,23 +53,23 @@ object TimeUnit {
     override val asPeriod: Period = Period.months(1)
   }
 
-  case object Quarter extends MultiTimeUnit(Array("q", "quarter"), "quarter"){
+  case object Quarter extends MultiTimeUnit(Array("q", "quarter"), "quarter") {
     override val asPeriod: Period = Period.months(3)
   }
 
-  case object Year extends MultiTimeUnit(Array("y", "year"), "year"){
+  case object Year extends MultiTimeUnit(Array("y", "year"), "year") {
     override val asPeriod: Period = Period.years(1)
   }
 
   case object Total extends TimeUnit {
     override val labels: Array[String] = Array("t", "total")
-    override val mainLabel: String = "total"
+    override val mainLabel: String     = "total"
   }
 
-
-  def lookup(label: String): TimeUnit = allUnits
-    .find(_.labels.contains(label))
-    .getOrElse(throw new IllegalArgumentException(s"Invalid label $label for time unit."))
+  def lookup(label: String): TimeUnit =
+    allUnits
+      .find(_.labels.contains(label))
+      .getOrElse(throw new IllegalArgumentException(s"Invalid label $label for time unit."))
 
   def apply(period: Period): Option[TimeUnit] = period.toString match {
     case "PT1S" => Some(TimeUnit.Second)

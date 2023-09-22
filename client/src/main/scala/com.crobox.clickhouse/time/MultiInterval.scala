@@ -30,7 +30,7 @@ object MultiInterval {
       case MultiDuration(value, Second) =>
         val ref = start.withMillisOfSecond(0)
 
-        val secs = ref.getMillis / 1000
+        val secs    = ref.getMillis / 1000
         val detSecs = secs - (secs % value)
 
         ref.withMillis(detSecs * 1000)
@@ -39,8 +39,7 @@ object MultiInterval {
           .withSecondOfMinute(0)
           .withMillisOfSecond(0)
 
-
-        val mins = ref.getMillis / Minute.standardMillis
+        val mins   = ref.getMillis / Minute.standardMillis
         val detMin = mins - (mins % value)
 
         ref.withMillis(detMin * Minute.standardMillis)
@@ -50,47 +49,47 @@ object MultiInterval {
           .withSecondOfMinute(0)
           .withMillisOfSecond(0)
 
-        val hours = ref.getMillis / Hour.standardMillis
+        val hours    = ref.getMillis / Hour.standardMillis
         val detHours = hours - (hours % value)
 
         ref.withMillis(detHours * Hour.standardMillis)
       case MultiDuration(value, Day) =>
-        val ref = start.withTimeAtStartOfDay()
+        val ref      = start.withTimeAtStartOfDay()
         val tzOffset = ref.getZone.getOffset(ref.withZone(DateTimeZone.UTC))
 
-        val days = (ref.getMillis + tzOffset) / Day.standardMillis
+        val days    = (ref.getMillis + tzOffset) / Day.standardMillis
         val detDays = days - (days % value)
 
         ref.withMillis((detDays * Day.standardMillis) - tzOffset)
       case MultiDuration(value, Week) =>
-        val ref = start.withTimeAtStartOfDay.withDayOfWeek(DateTimeConstants.MONDAY)
+        val ref      = start.withTimeAtStartOfDay.withDayOfWeek(DateTimeConstants.MONDAY)
         val tzOffset = ref.getZone.getOffset(ref.withZone(DateTimeZone.UTC))
 
         //Week 1 (since epoch) starts at the 5th of January 1970, hence we subtract the 4 days of week 0
         val msWeek1 = ref.getMillis - (Day.standardMillis * 4) + tzOffset
 
-        val weeks = msWeek1 / Week.standardMillis
+        val weeks    = msWeek1 / Week.standardMillis
         val detWeeks = weeks - (weeks % value)
 
         ref.withMillis((detWeeks * Week.standardMillis) + (Day.standardMillis * 4) - tzOffset)
       case MultiDuration(value, Month) =>
         val ref = start.withTimeAtStartOfDay.withDayOfMonth(1)
 
-        val months = (ref.getYear * 12) + ref.getMonthOfYear
+        val months       = (ref.getYear * 12) + ref.getMonthOfYear
         val detRelMonths = (months - 1) - (months % value)
 
         val detMonthOfYearZeroBased = detRelMonths % 12
-        val detYear = (detRelMonths - detMonthOfYearZeroBased) / 12
+        val detYear                 = (detRelMonths - detMonthOfYearZeroBased) / 12
 
         ref.withYear(detYear).withMonthOfYear(detMonthOfYearZeroBased + 1)
       case MultiDuration(value, Quarter) =>
         val ref = start.withTimeAtStartOfDay.withDayOfMonth(1)
 
-        val quarter = (ref.getYear * 4) + (ref.getMonthOfYear - 1) / 3
+        val quarter        = (ref.getYear * 4) + (ref.getMonthOfYear - 1) / 3
         val detRelQuarters = quarter - (quarter % value)
 
         val detQuarterOfYearZeroBased = detRelQuarters % 4
-        val detYear = (detRelQuarters - detQuarterOfYearZeroBased) / 4
+        val detYear                   = (detRelQuarters - detQuarterOfYearZeroBased) / 4
 
         ref.withYear(detYear).withMonthOfYear(detQuarterOfYearZeroBased * 3 + 1)
 
@@ -104,7 +103,6 @@ object MultiInterval {
         start
       case d => throw new IllegalArgumentException(s"Invalid duration: $d")
     }
-
 
   private def endFromDate(date: DateTime, duration: Duration) =
     duration match {

@@ -13,7 +13,8 @@ case class AlterTable(tableName: String, actions: Seq[ColumnOperation]) extends 
    *
    * @return String containing the Clickhouse dialect SQL statement
    */
-  override def query: String = s"ALTER TABLE ${ClickhouseStatement.quoteIdentifier(tableName)} ${actions.mkString(", ")}"
+  override def query: String =
+    s"ALTER TABLE ${ClickhouseStatement.quoteIdentifier(tableName)} ${actions.mkString(", ")}"
 
 }
 

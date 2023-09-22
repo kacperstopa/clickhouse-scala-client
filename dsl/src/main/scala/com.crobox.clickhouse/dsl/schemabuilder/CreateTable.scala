@@ -6,11 +6,9 @@ import com.crobox.clickhouse.dsl.{ClickhouseStatement, Table}
  * @author Sjoerd Mulder
  * @since 30-12-16
  */
-case class CreateTable(table: Table,
-                       engine: Engine,
-                       ifNotExists: Boolean = false,
-                       clusterName : Option[String] = None)
-    extends ClickhouseSchemaStatement with DistributedDdlSupport {
+case class CreateTable(table: Table, engine: Engine, ifNotExists: Boolean = false, clusterName: Option[String] = None)
+    extends ClickhouseSchemaStatement
+    with DistributedDdlSupport {
 
   require(table.columns.nonEmpty, "Cannot create a table without any columns")
 

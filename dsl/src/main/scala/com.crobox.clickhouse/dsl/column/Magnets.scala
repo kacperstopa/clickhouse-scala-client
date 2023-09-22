@@ -88,7 +88,7 @@ trait Magnets {
 
   implicit def arrayColMagnetFromIterableConst[T: QueryValue](s: scala.Iterable[T]): ArrayColMagnet[scala.Iterable[T]] =
     new ArrayColMagnet[scala.Iterable[T]] {
-      val qvForIterable = QueryValueFormats.queryValueToSeq(implicitly[QueryValue[T]])
+      val qvForIterable   = QueryValueFormats.queryValueToSeq(implicitly[QueryValue[T]])
       override val column = Const(s)(qvForIterable)
     }
 

@@ -34,8 +34,8 @@ object MultiDuration {
 }
 
 /**
-  * Special duration class that indicates the whole duration; similar to Duration.Inf
-  */
+ * Special duration class that indicates the whole duration; similar to Duration.Inf
+ */
 case object TotalDuration extends Duration {
   override val unit: TimeUnit = TimeUnit.Total
 }
